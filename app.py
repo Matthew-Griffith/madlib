@@ -13,12 +13,11 @@ def submitted():
         
         st = StanfordPOSTagger('english-left3words-distsim.tagger',
             path_to_jar='stanford-postagger-3.9.2.jar')
-        user_content = [
-            st.tag(line.split(' ')) 
-            for line in flask.request.form['user_content'].split('\n')
-        ]       
         
-        return flask.render_template('madlib_form.html', user_content=user_content)
+        user_text = flask.request.form['user_content'].replace('\n', ' -: ')
+        text_tagged = st.tag(user_text.split(' '))     
+        
+        return flask.render_template('madlib_form.html', user_content=text_tagged)
         # return str(flask.request.form['user_content'].split('\n'))
     else:
         return 'this was a get'

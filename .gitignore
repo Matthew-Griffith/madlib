@@ -1,2 +1,5 @@
 /venv/
 /__pycache__/
+stanford-postagger-3.9.2.jar
+english-left3words-distsim.tagger.props
+english-left3words-distsim.tagger
