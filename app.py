@@ -64,7 +64,7 @@ def get_blanks(tagged_text):
     # this list comperhension will create a possible list of choices for each sentence
     # it does this by filtering away words with tags that don't match a key in the
     # pos_tag_dict.
-    choices = [
+    possible_choices = [
         # the slice here is because the stanford tagger tags speach in a more precise
         # way than what we want for the madlib so we only care about the first two 
         # characters in the string matching
@@ -72,7 +72,12 @@ def get_blanks(tagged_text):
         for sentence in sentence_list
     ]
 
-    return list(map(random.choice, choices))
+    # return list(map(random.choice, possible_choices))
+    return [
+        random.choice(options)
+        for options in possible_choices
+        if options
+    ]
         
 
 
