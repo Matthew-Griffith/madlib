@@ -47,7 +47,7 @@ def get_blanks(tagged_text):
         # 'RB': 'Adverb',
         'NN': 'Noun',
         'VB': 'Verb',
-        'NP': 'Proper Noun',
+        'NNP': 'Proper Noun',
     }
 
     # this while loop goes through and seperates the tagged text into list of lists
@@ -71,26 +71,28 @@ def get_blanks(tagged_text):
     # https://repository.upenn.edu/cgi/viewcontent.cgi?article=1603&context=cis_reports
     possible_choices = [
         # the slice here is because the stanford tagger tags speach in a more precise
-        # way than what we want for the madlib so we only care about the first two 
+        # than what we want for the madlib so we only care about the first two 
         # characters in the string matching
         list(filter(lambda x: pos_tag_dict.get(x[1][:2]), sentence))
         for sentence in sentence_list
     ]
 
     # here we create a set of words up to 10 and then return it.
-    # NOTE: I think with the upcoming assignment operator you can do this as a set
-    #       comperhension. since in the if you could bind a random word to 
-    #       to check if it has been selected and then add that word to the set
     blank_words = set()
     for words in possible_choices:
         if not words or len(blank_words) > 9:
             pass
         else:
+            # here we get a random word and then remove the punctation(regex) from 
+            # the word and give the part of speach a more readable name for later
             rand_word = random.choice(words)
-            # the regex here is to remove any punctation from the user submitted
-            # word. so that the same word with a period at the end won't be
-            # picked twice
-            blank_words.add((re.sub('[.!?]', '', rand_word[0]), rand_word[1]))
+            user_word = re.sub('[.!?]', '', rand_word[0])
+            if rand_word[1][:3] == 'NNP':
+                pos = 'Proper Noun'
+            else:
+                pos = pos_tag_dict.get(rand_word[1][:2])
+
+            blank_words.add((user_word, pos))
     return blank_words
 
         
