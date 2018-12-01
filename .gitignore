@@ -3,3 +3,4 @@
 stanford-postagger-3.9.2.jar
 english-left3words-distsim.tagger.props
 english-left3words-distsim.tagger
+english-bidirectional-distsim.tagger

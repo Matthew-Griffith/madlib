@@ -1,6 +1,17 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <p>{{ user_content }}</p>
+    <!-- <p>{{ blank_words }}</p> -->
+    <form action="/your_madlib/{{ original_text }}" method="post">
+            <ul>
+                {% for word in blank_words %}
+                    <li>
+                        <label for="madlib">{{ word[1] }}</label>
+                        <input type="madlib" name={{ word[0] }} id={{ word[0] }} required>
+                    </li>
+                {% endfor %}    
+            </ul>
+            <input type="submit" value="create">
+        </form>
 
 {% endblock %}

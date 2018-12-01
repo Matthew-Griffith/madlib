@@ -17,17 +17,37 @@ def submitted():
         rand_blanks = get_blanks(tagged_text)
 
         return flask.render_template('madlib_form.html', 
-            user_content=rand_blanks)
+            blank_words=rand_blanks,
+            original_text=flask.request.form['user_content'].replace('\n', '_'))
         # return str(flask.request.form['user_content'].split('\n'))
     else:
         return 'this was a get'
+
+@app.route('/your_madlib/<string:original_text>', methods=['POST'])
+def your_madlib(original_text):
+    madlib_list = [
+        sentence.split(' ')
+        for sentence in original_text.split('_')
+    ]
+
+    new_words = list(map(lambda word: word.lower(), flask.request.form))
+    madlib=''
+    for sentence in madlib_list:
+        for word in sentence:
+            if word.lower() in new_words:
+                madlib += ' ' + flask.request.form[word]
+            else:
+                madlib += ' ' + word
+        madlib += '\n'
+    
+    return flask.render_template('user_madlib.html', madlib=madlib)
 
 def tag_text(text):
     ''' 
         this function will take in the user text and run it through the stanford
         POS tagger and return a list of tagged words. 
     '''
-    st = StanfordPOSTagger('english-left3words-distsim.tagger',
+    st = StanfordPOSTagger('english-bidirectional-distsim.tagger',
         path_to_jar='stanford-postagger-3.9.2.jar')
     # here we replace new lines with ' -: ' because otherwise the tagger will
     # get rid of the \n and we won't be able to reassemble the text of the user
@@ -39,6 +59,7 @@ def get_blanks(tagged_text):
         this function will take the tagged text and return a list of words that
         the users will pick the words for.
     '''
+    # TODO: this function seems too long, maybe break it into smaller functions?
 
     # here is the basic list of part of speech that we want to give the user a 
     # as a blank in their madlib
