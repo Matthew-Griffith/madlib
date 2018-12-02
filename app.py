@@ -13,32 +13,42 @@ def index():
 def submitted():
     if flask.request.method == 'POST':        
 
+        # here will get the tagged text from the form the user filled out on the
+        # index page of the site
         tagged_text = tag_text(flask.request.form['user_content'])
+        # here we take our tagged text and find random blanks for certain POS
         rand_blanks = get_blanks(tagged_text)
 
         return flask.render_template('madlib_form.html', 
             blank_words=rand_blanks,
             original_text=flask.request.form['user_content'].replace('\n', '_'))
-        # return str(flask.request.form['user_content'].split('\n'))
     else:
         return 'this was a get'
 
 @app.route('/your_madlib/<string:original_text>', methods=['POST'])
 def your_madlib(original_text):
-    madlib_list = [
-        sentence.split(' ')
-        for sentence in original_text.split('_')
-    ]
+    
+    # here we turn the original text into a list of lists. where the inner lists
+    # containing the word for each line.
+    madlib_list = map(lambda sentence: sentence.split(' '), original_text.split('_'))
+    # here we just won't the make the original words list lower case for matching
+    # them in the nest for loop below
+    original_words = list(map(lambda word: word.lower(), flask.request.form))
 
-    new_words = list(map(lambda word: word.lower(), flask.request.form))
+    # here we are going to loop over the whole madlib_lists to check if each word should
+    # be replaced, if it should we replacing by add the user selected word to the madlib
+    # string that we will return the user.
     madlib=''
     for sentence in madlib_list:
         for word in sentence:
-            if word.lower() in new_words:
+            if word.lower() in original_words:
                 madlib += ' ' + flask.request.form[word]
             else:
                 madlib += ' ' + word
         madlib += '\n'
+    # this strip will get rid of the last newline that shouldn't be there and it
+    # will remove the blank space at the start of the text.
+    madlib = mablib.strip()
     
     return flask.render_template('user_madlib.html', madlib=madlib)
 
@@ -47,7 +57,7 @@ def tag_text(text):
         this function will take in the user text and run it through the stanford
         POS tagger and return a list of tagged words. 
     '''
-    st = StanfordPOSTagger('english-bidirectional-distsim.tagger',
+    st = StanfordPOSTagger('english-left3words-distsim.tagger',
         path_to_jar='stanford-postagger-3.9.2.jar')
     # here we replace new lines with ' -: ' because otherwise the tagger will
     # get rid of the \n and we won't be able to reassemble the text of the user
@@ -94,7 +104,7 @@ def get_blanks(tagged_text):
         # the slice here is because the stanford tagger tags speach in a more precise
         # than what we want for the madlib so we only care about the first two 
         # characters in the string matching
-        list(filter(lambda x: pos_tag_dict.get(x[1][:2]), sentence))
+        list(filter(lambda tagged_word: pos_tag_dict.get(tagged_word[1][:2]), sentence))
         for sentence in sentence_list
     ]
 
