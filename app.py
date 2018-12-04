@@ -39,19 +39,17 @@ def your_madlib(original_text):
     # here we are going to loop over the whole madlib_lists to check if each word should
     # be replaced, if it should we replacing by add the user selected word to the madlib
     # string that we will return the user.
-    madlib=''
+    finished_madlib = []
     for sentence in madlib_list:
+        madlib_line=''
         for word in sentence:
             if word.lower() in original_words:
-                madlib += ' ' + flask.request.form[word]
+                madlib_line += ' ' + flask.request.form[word]
             else:
-                madlib += ' ' + word
-        madlib += '\n'
-    # this strip will get rid of the last newline that shouldn't be there and it
-    # will remove the blank space at the start of the text.
-    madlib = madlib.strip()
+                madlib_line += ' ' + word
+        finished_madlib.append(madlib_line.lstrip())
     
-    return flask.render_template('user_madlib.html', madlib=madlib)
+    return flask.render_template('user_madlib.html', madlib=finished_madlib)
 
 def tag_text(text):
     ''' 

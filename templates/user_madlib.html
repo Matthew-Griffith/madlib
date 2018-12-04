@@ -1,6 +1,8 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <p>{{ madlib }}</p>
+{% for line in madlib %}
+<p class="final-text">{{ line}}</p>
+{% endfor %}
 
 {% endblock %}
