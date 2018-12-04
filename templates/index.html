@@ -1,8 +1,26 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <form action="/submitted", method="post">
-        <textarea name="user_content" id="user_content" cols="30" rows="10"></textarea>
-        <input type="submit" value="Generate">
-    </form>
+<div class="container">
+  <div class="row">
+    <div class="col-md-2">
+    </div>
+  </div>
+  <div class="row" >
+    <div class="col-md-8" id="index-form-container">
+      <div>
+	<h1 id="index-title">Mad lib Generator</h1>
+	<p>Enter the text you want to turn into a mad lib below. Try it with the song lyrics for your favorite song</p>
+      </div>
+      <form action="/submitted", method="post">
+	<div class="form-group">
+	  <textarea name="user_content" class="form-control" id="user_content" rows="10" cols="30" required></textarea>
+	</div>
+	<button id="index-button" type="submit" value="Generate" class="btn btn-primary float-right">Generate</button>
+      </form>
+      <div class="bottom-of-form"></div>
+    </div>
+  </div>
+</div>
+
 {% endblock %}

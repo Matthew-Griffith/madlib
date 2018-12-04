@@ -1,0 +1,22 @@
+form {
+    padding: 1em 0;
+}
+
+#index-title {
+    margin-top: 10px;
+}
+
+
+body {
+    font-family: 'Source Sans Pro', sans-serif !important;
+}
+
+#index-form-container {
+    /* background-color: #efefef; */
+    border-radius: 10px;
+}
+
+.bottom-of-form {
+    height: 4em;
+}
+

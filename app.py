@@ -22,6 +22,7 @@ def submitted():
         return flask.render_template('madlib_form.html', 
             blank_words=rand_blanks,
             original_text=flask.request.form['user_content'].replace('\n', '_'))
+
     else:
         return 'this was a get'
 
@@ -48,7 +49,7 @@ def your_madlib(original_text):
         madlib += '\n'
     # this strip will get rid of the last newline that shouldn't be there and it
     # will remove the blank space at the start of the text.
-    madlib = mablib.strip()
+    madlib = madlib.strip()
     
     return flask.render_template('user_madlib.html', madlib=madlib)
 
